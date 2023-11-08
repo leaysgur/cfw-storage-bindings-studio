@@ -1,0 +1,38 @@
+{
+  "name": "cfw-storage-bindings-studio",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build:app": "vite build",
+    "build:launcher": "esbuild ./bin/launcher.js --platform=node --minify --outfile=./build/launcher.js",
+    "build": "npm run build:app && npm run build:launcher",
+    "preview:app": "vite preview --port 5173",
+    "preview": "node build/launcher.js",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
+    "format": "prettier --plugin prettier-plugin-svelte --write ."
+  },
+  "author": "Yuji Sugiura",
+  "license": "MIT",
+  "bin": {
+    "cfw-storage-bindings-studio": "build/launcher.js"
+  },
+  "files": [
+    "build"
+  ],
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0",
+    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/kit": "^1.27.3",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
+    "svelte": "^4.2.2",
+    "svelte-check": "^3.5.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
+  },
+  "dependencies": {
+    "@tanstack/svelte-query": "^5.7.2",
+    "cfw-bindings-wrangler-bridge": "^0.9.3"
+  }
+}
