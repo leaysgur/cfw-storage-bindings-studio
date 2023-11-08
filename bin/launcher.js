@@ -4,7 +4,8 @@ import { parseArgs } from "node:util";
 import { access, writeFile } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { createServer } from "node:http";
-import { join, extname } from "node:path";
+import { join, extname, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const MIME_TYPES = {
   default: "application/octet-stream",
@@ -13,7 +14,8 @@ const MIME_TYPES = {
   js: "application/javascript",
 };
 
-const STATIC_PATH = join(process.cwd(), "./build");
+const BIN_DIR_NAME = dirname(fileURLToPath(import.meta.url));
+const STATIC_PATH = BIN_DIR_NAME.endsWith("/bin") ? join(process.cwd(), "./build") : BIN_DIR_NAME;
 
 (async () => {
   const { values } = parseArgs({
