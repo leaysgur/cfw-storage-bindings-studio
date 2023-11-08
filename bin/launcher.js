@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // @ts-check
 import { parseArgs } from "node:util";
 import { access, writeFile } from "node:fs/promises";
@@ -14,8 +15,6 @@ const MIME_TYPES = {
 
 const STATIC_PATH = join(process.cwd(), "./build");
 
-// ---
-
 (async () => {
   const { values } = parseArgs({
     args: process.argv.slice(2),
@@ -28,6 +27,7 @@ const STATIC_PATH = join(process.cwd(), "./build");
     },
   });
 
+  // Communicate the bridge origin to the launcher
   await writeFile(
     join(STATIC_PATH, "launcher.json"),
     JSON.stringify({ bridgeOrigin: values["bridge-origin"] }),
