@@ -1,5 +1,7 @@
 # cfw-storage-bindings-studio
 
+> 🚧 Work in progress... 👷
+
 Generic GUI for storage-related bindings based on [`cfw-bindings-wrangler-bridge`](https://github.com/leaysgur/cfw-bindings-wrangler-bridge) module.
 
 You can interact both local and remote data! 🧙
@@ -29,4 +31,17 @@ npx cfw-storage-bindings-studio --bridge-origin http://localhost:8686
 
 ## TODOs
 
-- TBD...
+- [x] CLI
+- [x] CLI <-> APP
+- [x] List bindings
+- [x] KV.list
+- [x] KV.get
+- [ ] Better details by MIME
+- [x] KV.delete
+- [x] KV.put(new)
+- [x] KV.put(update)
+- [x] D1.showTables
+- [x] D1.showAllRows
+- [ ] D1 custom SQL
+- [ ] R2.list
+- [ ] TBD...
