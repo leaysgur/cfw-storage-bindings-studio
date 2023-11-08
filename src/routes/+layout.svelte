@@ -9,7 +9,7 @@
       D1Database$: "d1",
       KVNamespace$: "kv",
       R2Bucket$: "r2",
-    })[ctorName] ?? ctorName;
+    })[ctorName] ?? "TODO-" + ctorName;
 
   const appContext = {
     bindings: {},
@@ -20,7 +20,7 @@
 
   let bindingsPromise = new Promise(() => {});
   onMount(() => {
-    bindingsPromise = fetch("/launcher.json")
+    bindingsPromise = fetch("/settings.json")
       .then((r) => r.json())
       .then((j) => j.bridgeOrigin)
       .then((bridgeOrigin) => createBridge(bridgeOrigin).getBindings())

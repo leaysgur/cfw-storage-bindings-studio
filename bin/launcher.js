@@ -29,7 +29,7 @@ const STATIC_PATH = join(process.cwd(), "./build");
 
   // Communicate the bridge origin to the launcher
   await writeFile(
-    join(STATIC_PATH, "launcher.json"),
+    join(STATIC_PATH, "settings.json"),
     JSON.stringify({ bridgeOrigin: values["bridge-origin"] }),
   );
 
