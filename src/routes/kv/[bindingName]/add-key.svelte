@@ -20,7 +20,15 @@
 </script>
 
 <form on:submit|preventDefault={() => $putMutation.mutate()}>
-  <input type="text" bind:value={draft.key} required />
-  <textarea bind:value={draft.value} />
+  <label
+    >Key:
+    <input type="text" bind:value={draft.key} required />
+  </label>
+  <label
+    >Value:
+    <textarea bind:value={draft.value} />
+    OR
+    TODO: <input type="file" />
+  </label>
   <button type="submit" disabled={$putMutation.isPending}>Put</button>
 </form>
