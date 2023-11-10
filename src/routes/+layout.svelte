@@ -3,20 +3,22 @@
   import { createBridge } from "cfw-bindings-wrangler-bridge";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
 
-  /** @param {string} ctorName */
-  const ctorToType = (ctorName) =>
-    ({
-      D1Database$: "d1",
-      KVNamespace$: "kv",
-      R2Bucket$: "r2",
-    })[ctorName] ?? "TODO-" + ctorName;
+  /** @type {Record<string, string>} */
+  const CTOR_TO_TYPE = {
+    D1Database$: "d1",
+    KVNamespace$: "kv",
+    R2Bucket$: "r2",
+  };
 
+  /**
+   * @type {{
+   *   bindings: Record<string, Function>;
+   * }}
+   */
   const appContext = {
     bindings: {},
   };
   setContext("appContext", appContext);
-
-  const queryClient = new QueryClient();
 
   let bindingsPromise = new Promise(() => {});
   onMount(() => {
@@ -35,8 +37,8 @@
   🌀 Loading bindings...
 {:then}
   <ul>
-    {#each Object.entries(appContext.bindings) as [name, binding]}
-      {@const type = ctorToType(binding.constructor.name)}
+    {#each Object.entries(appContext.bindings).sort( ([a], [b]) => a.localeCompare(b), ) as [name, binding]}
+      {@const type = CTOR_TO_TYPE[binding.constructor.name] ?? "-"}
       <li>
         <a href={`/${type}/${name}`}>
           [{type}] {name}
@@ -45,7 +47,7 @@
     {/each}
   </ul>
   <hr />
-  <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={new QueryClient()}>
     <slot />
   </QueryClientProvider>
 {:catch err}
