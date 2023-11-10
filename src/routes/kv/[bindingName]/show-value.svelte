@@ -9,7 +9,9 @@
   /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>} */
   export let key;
 
-  /** @type {string | null} */
+  const VIEW_TYPES = /** @type {const} */ (["json"]);
+
+  /** @type {VIEW_TYPES[number] | null} */
   let viewAs = null;
   /** @type {HTMLDialogElement} */
   let dialogRef;
@@ -18,13 +20,12 @@
   const getQuery = createQuery({
     queryKey: ["kv", bindingName, key.name],
     queryFn: () => KV.get(key.name, "arrayBuffer"),
-    select: (data) => (data === null ? null : decodeText(data)),
   });
 
   /** @param {any} data */
   const prettifyJSON = (data) => {
     try {
-      return JSON.stringify(JSON.parse(data), null, 2);
+      return JSON.stringify(JSON.parse(decodeText(data)), null, 2);
     } catch {
       return "🤯 Not valid JSON!";
     }
@@ -39,12 +40,12 @@
   {#if $getQuery.data === null}
     <pre>🙈 Value was `null`...</pre>
   {:else}
+    <textarea readonly disabled>{decodeText($getQuery.data)}</textarea>
     <div>
-      {#each ["json"] as viewType}
+      {#each VIEW_TYPES as viewType}
         <button on:click={() => (viewAs = viewType)} style="font-size: .6rem">{viewType}</button>
       {/each}
     </div>
-    <textarea readonly disabled>{$getQuery.data}</textarea>
 
     <dialog
       bind:this={dialogRef}
