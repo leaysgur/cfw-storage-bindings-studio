@@ -1,0 +1,1 @@
+var t=Object.defineProperty;var r=(s,e)=>t(s,"name",{value:e,configurable:!0});import{d as a}from"./singletons.26656215.js";const b=r(()=>{const s=a;return{page:{subscribe:s.page.subscribe},navigating:{subscribe:s.navigating.subscribe},updated:s.updated}},"getStores"),c={subscribe(s){return b().page.subscribe(s)}};export{c as p};
