@@ -12,10 +12,7 @@
   const getQuery = createQuery({
     queryKey: ["kv", bindingName, key.name],
     queryFn: () => KV.get(key.name, "arrayBuffer"),
-    select: (data) => {
-      if (data === null) return null;
-      return decodeText(data);
-    },
+    select: (data) => (data === null ? null : decodeText(data)),
   });
 </script>
 

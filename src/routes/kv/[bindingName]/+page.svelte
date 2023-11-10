@@ -30,13 +30,6 @@
 
 kv/{$page.params.bindingName}
 
-<button
-  disabled={$listQuery.isFetching}
-  on:click={() => queryClient.invalidateQueries({ queryKey })}
->
-  Refresh
-</button>
-
 <details>
   <summary>Add new key:value</summary>
   <AddKey {KV} {bindingName} />
@@ -49,10 +42,20 @@ kv/{$page.params.bindingName}
 {:else if $listQuery.isError}
   <pre>💥 {$listQuery.error.message}</pre>
 {:else if $listQuery.isSuccess}
+  <button
+    disabled={$listQuery.isFetching}
+    on:click={() => queryClient.invalidateQueries({ queryKey })}
+  >
+    Refresh
+  </button>
+
   <label>
     Filter key:
     <input type="search" bind:value={filter} />
   </label>
+
+  <hr />
+
   <table>
     <thead>
       <tr>
@@ -69,6 +72,11 @@ kv/{$page.params.bindingName}
               <td>{key.name}</td>
               <td><ShowValue {KV} {bindingName} {key} /></td>
               <td>
+                <button
+                  on:click={() =>
+                    queryClient.invalidateQueries({ queryKey: ["kv", bindingName, key.name] })}
+                  >Refresh</button
+                >
                 <UpdateKey {KV} {bindingName} {key} />
                 <DeleteKey {KV} {bindingName} {key} />
               </td>
