@@ -17,6 +17,9 @@
   });
 </script>
 
-<button disabled={$deleteMutation.isPending} on:click={() => $deleteMutation.mutate()}>
+<button
+  disabled={$deleteMutation.isPending}
+  on:click={() => confirm("Are you sure?") && $deleteMutation.mutate()}
+>
   Delete
 </button>

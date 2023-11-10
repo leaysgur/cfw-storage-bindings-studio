@@ -3,8 +3,9 @@
   import { createInfiniteQuery, useQueryClient } from "@tanstack/svelte-query";
   import { page } from "$app/stores";
   import AddKey from "./add-key.svelte";
+  import ShowValue from "./show-value.svelte";
+  import UpdateKey from "./update-key.svelte";
   import DeleteKey from "./delete-key.svelte";
-  import KvValue from "./kv-value.svelte";
 
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
@@ -66,8 +67,11 @@ kv/{$page.params.bindingName}
           {#if filter === "" || key.name.includes(filter)}
             <tr>
               <td>{key.name}</td>
-              <td><KvValue {KV} {bindingName} {key} /></td>
-              <td><DeleteKey {KV} {bindingName} {key} /></td>
+              <td><ShowValue {KV} {bindingName} {key} /></td>
+              <td>
+                <UpdateKey {KV} {bindingName} {key} />
+                <DeleteKey {KV} {bindingName} {key} />
+              </td>
             </tr>
           {/if}
         {/each}
