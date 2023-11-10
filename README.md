@@ -36,11 +36,12 @@ npx cfw-storage-bindings-studio --bridge-origin http://localhost:8686
 - [x] List bindings
 - [x] KV.list
 - [x] KV.get
-- [ ] Better details by MIME
+- [x] Better details by MIME
 - [x] KV.delete
 - [x] KV.put(new)
 - [x] KV.put(update)
 - [x] KV.put(text | binary)
+- [x] KV revalidate all/each
 - [x] D1.showTables
 - [x] D1.showAllRows
 - [ ] D1 custom SQL
