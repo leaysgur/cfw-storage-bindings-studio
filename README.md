@@ -8,7 +8,7 @@ You can interact both local and remote data! 🧙
 
 ## What does it solve?
 
-- Remotely: Cloudflare dashboard is not a good UX(sorry, IMO)
+- Remotely: Cloudflare dashboard required auth, and not a good UX(sorry, IMO)
 - Locally: `miniflare` persistent source, no way to easily see what's in it
 
 This module tries to solve these both problems at once.
@@ -17,7 +17,7 @@ This module tries to solve these both problems at once.
 
 0️⃣ Set up [`cfw-bindings-wrangler-bridge`](https://github.com/leaysgur/cfw-bindings-wrangler-bridge) worker process.
 
-1️⃣ Launch GUI. That's all ✌️
+1️⃣ Launch GUI in your favorite browser. That's all! ✌️
 
 ```sh
 npx cfw-storage-bindings-studio
