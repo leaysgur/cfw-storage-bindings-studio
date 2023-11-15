@@ -6,6 +6,7 @@ import { createReadStream } from "node:fs";
 import { createServer } from "node:http";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { unstable_dev } from "wrangler";
 
 const MIME_TYPES = {
   default: "application/octet-stream",
@@ -17,23 +18,27 @@ const MIME_TYPES = {
 const BIN_DIR_NAME = dirname(fileURLToPath(import.meta.url));
 const STATIC_PATH = BIN_DIR_NAME.endsWith("/bin") ? join(process.cwd(), "./build") : BIN_DIR_NAME;
 
+let devWorker;
 (async () => {
   const { values } = parseArgs({
     args: process.argv.slice(2),
     options: {
-      "bridge-origin": {
-        type: "string",
-        default: "http://127.0.0.1:8787",
-      },
       "studio-port": { type: "string", default: "3000" },
+      config: { short: "c", type: "string", default: "./wrangler.toml" },
+      "persist-to": { type: "string", default: ".wrangler/state" },
+      remote: { type: "boolean", default: false },
     },
   });
 
+  devWorker = await unstable_dev(join(STATIC_PATH, "worker.js"), {
+    ...(values["remote"] ? { local: false } : { local: true, persistTo: values["persist-to"] }),
+    config: values["config"],
+    experimental: { disableExperimentalWarning: true },
+  });
+  const bridgeOrigin = `http://${devWorker.address}:${devWorker.port}`;
+
   // Communicate the bridge origin to the launcher
-  await writeFile(
-    join(STATIC_PATH, "settings.json"),
-    JSON.stringify({ bridgeOrigin: values["bridge-origin"] }),
-  );
+  await writeFile(join(STATIC_PATH, "settings.json"), JSON.stringify({ bridgeOrigin }));
 
   createServer(async (req, res) => {
     const filePath = join(STATIC_PATH, String(req.url));
@@ -61,6 +66,18 @@ const STATIC_PATH = BIN_DIR_NAME.endsWith("/bin") ? join(process.cwd(), "./build
     return createReadStream(filePath).pipe(res);
   }).listen(values["studio-port"]);
 
-  console.log(`Server running on http://127.0.0.1:${values["studio-port"]}`);
-  console.log(`  with bridge running on ${values["bridge-origin"]}`);
-})();
+  console.log(`GUI is running on http://127.0.0.1:${values["studio-port"]}`);
+  if (values["remote"]) {
+    console.log(`  with bridge(mode=remote) running on ${bridgeOrigin}`);
+  } else {
+    console.log(`  with bridge(mode=local) running on ${bridgeOrigin}`);
+    console.log(`    persistTo: ${values["persist-to"]}`);
+  }
+  {
+    console.log(`    config: ${values["config"]}`);
+  }
+})().catch(async (err) => {
+  console.error(err);
+  await devWorker?.stop();
+  process.exit(1);
+});

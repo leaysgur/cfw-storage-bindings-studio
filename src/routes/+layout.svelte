@@ -1,6 +1,6 @@
 <script>
   import { onMount, setContext } from "svelte";
-  import { createBridge } from "cfw-bindings-wrangler-bridge";
+  import { getBindings } from "cfw-bindings-wrangler-bridge";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
 
   /** @type {Record<string, string>} */
@@ -25,7 +25,7 @@
     bindingsPromise = fetch("/settings.json")
       .then((r) => r.json())
       .then((j) => j.bridgeOrigin)
-      .then((bridgeOrigin) => createBridge(bridgeOrigin).getBindings())
+      .then((bridgeWorkerOrigin) => getBindings({ bridgeWorkerOrigin }))
       .then((bindings) => {
         appContext.bindings = bindings;
         return bindings;
