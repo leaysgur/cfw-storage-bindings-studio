@@ -15,18 +15,15 @@ This module tries to solve these both problems at once.
 
 ## Usage
 
-0️⃣ Set up [`cfw-bindings-wrangler-bridge`](https://github.com/leaysgur/cfw-bindings-wrangler-bridge) worker process.
-
-1️⃣ Launch GUI in your favorite browser. That's all! ✌️
-
 ```sh
 npx cfw-storage-bindings-studio
 
 # Options
 # For GUI running port, default: 3000
 npx cfw-storage-bindings-studio --studio-port 5173
-# For bridge worker origin, default: http://127.0.0.1:8787
-npx cfw-storage-bindings-studio --bridge-origin http://localhost:8686
+# For bridge worker settings
+npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --remote
+npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./path/to/.wrangler/state
 ```
 
 ## TODOs
