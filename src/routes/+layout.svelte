@@ -28,6 +28,8 @@
       .then((bridgeWorkerOrigin) => getBindings({ bridgeWorkerOrigin }))
       .then((bindings) => {
         appContext.bindings = bindings;
+        // @ts-ignore: Just for debugging and demonstration purposes
+        globalThis.env = bindings;
         return bindings;
       });
   });
