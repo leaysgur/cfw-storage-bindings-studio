@@ -19,7 +19,7 @@
   $: D1 = bindings[bindingName];
 
   $: queryKey = ["d1", bindingName, "tables"];
-  const tablesQuery = createQuery({
+  $: tablesQuery = createQuery({
     queryKey,
     queryFn: () =>
       D1.prepare("SELECT tbl_name FROM sqlite_master WHERE type == ?").bind("table").raw(),
