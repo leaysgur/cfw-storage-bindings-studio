@@ -33,8 +33,10 @@
     "vite": "^4.5.0"
   },
   "dependencies": {
+    "@codemirror/lang-sql": "^6.5.4",
     "@tanstack/svelte-query": "^5.8.4",
     "cfw-bindings-wrangler-bridge": "^0.10.1",
+    "svelte-codemirror-editor": "^1.2.0",
     "wrangler": "^3.16.0"
   }
 }

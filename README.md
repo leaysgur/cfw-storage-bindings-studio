@@ -39,8 +39,14 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./
 - [x] KV.put(update)
 - [x] KV.put(text | binary)
 - [x] KV revalidate all/each
-- [x] D1.showTables
-- [x] D1.showAllRows
-- [ ] D1 custom SQL
-- [ ] R2.list
+- [x] D1 showTables
+- [x] D1 showAllRows
+- [ ] D1 custom SQL repl
+- [ ] D1 tab UI by tables
+- [ ] D1 LIMIT/OFFSET
+- [ ] D1 Add record
+- [ ] D1 Update record
+- [ ] D1 Delete record
+- [ ] R2.xxx
+- [ ] Fancy UI 💅
 - [ ] TBD...
