@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
   import { createQuery, useQueryClient } from "@tanstack/svelte-query";
   import { page } from "$app/stores";
-  import { filterPrivateTableList } from "$lib/d1";
+  import { excludePrivateTableList } from "$lib/d1";
   import SQLRepl from "./sql-repl.svelte";
 
   const { bindings } = getContext("appContext");
@@ -19,7 +19,7 @@
       D1.prepare("PRAGMA table_list")
         .raw()
         .then((rows) => /** @type {string[][]} */ (rows)),
-    select: (data) => filterPrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
+    select: (data) => excludePrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
   });
 </script>
 

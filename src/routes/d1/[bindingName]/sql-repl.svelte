@@ -3,7 +3,7 @@
   // @ts-ignore: Cannot find type declarations...why??
   import CodeMirror from "svelte-codemirror-editor";
   import { sql, SQLite } from "@codemirror/lang-sql";
-  import { filterPrivateTableList } from "$lib/d1";
+  import { excludePrivateTableList } from "$lib/d1";
 
   /** @param {import("@cloudflare/workers-types/experimental").D1Database} D1 */
   const queryTableSchema = async (D1) => {
@@ -13,7 +13,7 @@
     /** @type {Record<string, string[]>} */
     const schema = {};
     await Promise.all(
-      filterPrivateTableList(allTables).map((table) =>
+      excludePrivateTableList(allTables).map((table) =>
         D1.prepare(`PRAGMA table_info(${table[1]})`)
           .raw()
           .then((rows) => /** @type {string[][]} */ (rows))

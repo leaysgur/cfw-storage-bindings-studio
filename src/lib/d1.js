@@ -1,5 +1,5 @@
 /** @param {string[][]} pragmaTableListResult */
-export const filterPrivateTableList = (pragmaTableListResult) =>
+export const excludePrivateTableList = (pragmaTableListResult) =>
   pragmaTableListResult.filter(
     ([schema, name, type]) =>
       schema === "main" &&
