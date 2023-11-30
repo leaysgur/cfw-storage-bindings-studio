@@ -31,7 +31,7 @@ d1/{bindingName}/{tableName}
 {:else if $rowsQuery.isError}
   <pre>💥 {$rowsQuery.error.message}</pre>
 {:else if $rowsQuery.isSuccess}
-  <table>
+  <table style="white-space: nowrap;" border={1}>
     <thead>
       <tr>
         {#each Object.keys($rowsQuery.data[0]) as column}

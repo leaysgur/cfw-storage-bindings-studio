@@ -4,6 +4,7 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { sql, SQLite } from "@codemirror/lang-sql";
   import { excludePrivateTableList } from "$lib/d1";
+  import SqlResults from "./sql-results.svelte";
 
   /** @param {import("@cloudflare/workers-types/experimental").D1Database} D1 */
   const queryTableSchema = async (D1) => {
@@ -42,7 +43,7 @@
     enabled: replOpen,
   });
 
-  let draftValue = "";
+  let draftValue = "\n\n";
   let sqlToRun = "";
 </script>
 
@@ -63,10 +64,10 @@
     />
     <hr />
     <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
-    <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue === ""}>Run</button>
+    <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}>Run</button>
     <hr />
     {#if sqlToRun !== ""}
-      <pre>{sqlToRun}</pre>
+      <SqlResults {D1} {bindingName} {sqlToRun} />
     {/if}
   {/if}
 </dialog>
