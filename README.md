@@ -31,6 +31,8 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./
 - [x] CLI
 - [x] CLI <-> APP
 - [x] List bindings
+- [ ] Svelte 5 migration(blocked by svelte-query) 🔥
+- [ ] Fancy UI
 - [x] KV.list
 - [x] KV.get
 - [x] Better details by MIME
@@ -48,5 +50,4 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./
 - [ ] D1 Update record
 - [ ] D1 Delete record
 - [ ] R2.xxx
-- [ ] Fancy UI 💅
 - [ ] TBD...
