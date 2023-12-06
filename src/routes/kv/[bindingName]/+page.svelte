@@ -82,6 +82,8 @@ kv/{$page.params.bindingName}
               </td>
             </tr>
           {/if}
+        {:else}
+          <tr><td colspan={3}>No entries...</td></tr>
         {/each}
       {/each}
     </tbody>

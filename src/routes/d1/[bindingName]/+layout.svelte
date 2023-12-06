@@ -39,6 +39,8 @@ d1/{$page.params.bindingName}
   <ul>
     {#each $tablesQuery.data as { name, ncol }}
       <li><a href={`/d1/${bindingName}/${name}`}>{name} ({ncol} cols)</a></li>
+    {:else}
+      <li>No tables...</li>
     {/each}
   </ul>
 {/if}

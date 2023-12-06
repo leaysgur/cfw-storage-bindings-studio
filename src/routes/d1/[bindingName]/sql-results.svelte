@@ -24,7 +24,7 @@
 
   {#if meta.changed_db}
     {meta.changes} rows are changed.
-  {:else}
+  {:else if results.length !== 0}
     <table style="white-space: nowrap;" border={1}>
       <thead>
         <tr>
@@ -43,5 +43,7 @@
         {/each}
       </tbody>
     </table>
+  {:else}
+    <p>No records...</p>
   {/if}
 {/if}

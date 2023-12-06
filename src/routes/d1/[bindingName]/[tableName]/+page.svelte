@@ -31,22 +31,28 @@ d1/{bindingName}/{tableName}
 {:else if $rowsQuery.isError}
   <pre>💥 {$rowsQuery.error.message}</pre>
 {:else if $rowsQuery.isSuccess}
-  <table style="white-space: nowrap;" border={1}>
-    <thead>
-      <tr>
-        {#each Object.keys($rowsQuery.data[0]) as column}
-          <th>{column}</th>
-        {/each}
-      </tr>
-    </thead>
-    <tbody>
-      {#each $rowsQuery.data as row}
+  {@const rows = $rowsQuery.data}
+
+  {#if rows.length !== 0}
+    <table style="white-space: nowrap;" border={1}>
+      <thead>
         <tr>
-          {#each Object.values(row) as value}
-            <td>{value}</td>
+          {#each Object.keys(rows[0]) as column}
+            <th>{column}</th>
           {/each}
         </tr>
-      {/each}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each rows as row}
+          <tr>
+            {#each Object.values(row) as value}
+              <td>{value}</td>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  {:else}
+    <p>No records...</p>
+  {/if}
 {/if}
