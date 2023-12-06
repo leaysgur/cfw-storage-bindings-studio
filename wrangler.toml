@@ -1,0 +1,13 @@
+compatibility_date = "2023-10-25"
+# account_id = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "demo-d1"
+database_id = "dummy-d1"
+# preview_database_id = ""
+
+[[kv_namespaces]]
+binding = "KVS"
+id = "dummy-kv"
+# preview_id = ""
