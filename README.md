@@ -44,7 +44,6 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./
 - [x] D1 showTables
 - [x] D1 showAllRows
 - [x] D1 custom SQL repl
-- [ ] D1 tab UI by tables
 - [ ] D1 LIMIT/OFFSET
 - [ ] D1 Add record
 - [ ] D1 Update record
