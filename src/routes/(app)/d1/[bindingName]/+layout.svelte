@@ -3,7 +3,6 @@
   import { createQuery, useQueryClient } from "@tanstack/svelte-query";
   import { page } from "$app/stores";
   import { excludePrivateTableList } from "$lib/d1";
-  import SQLRepl from "./sql-repl.svelte";
 
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
@@ -34,8 +33,6 @@
     <pre>💥 {$tablesQuery.error.message}</pre>
   {:else if $tablesQuery.isSuccess}
     <div class="action">
-      <SQLRepl {D1} {bindingName} />
-
       <button
         disabled={$tablesQuery.isFetching}
         on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh tables list</button
@@ -49,6 +46,11 @@
         {:else}
           <li>No tables...</li>
         {/each}
+      </ul>
+      <ul>
+        <li>
+          <a href={`/d1/${bindingName}/repl`}>REPL</a>
+        </li>
       </ul>
     </div>
   {/if}
@@ -76,7 +78,7 @@
   .action {
     grid-area: action;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     border-bottom: var(--border-size-1) solid var(--indigo-2);
     padding-inline: var(--size-3);
     padding-block: var(--size-4);
@@ -84,10 +86,14 @@
 
   .selector {
     grid-area: selector;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-3);
     padding-block: var(--size-3);
     padding-inline-end: var(--size-3);
     border-right: var(--border-size-1) solid var(--indigo-2);
   }
+
   .main {
     grid-area: main;
     overflow: hidden;

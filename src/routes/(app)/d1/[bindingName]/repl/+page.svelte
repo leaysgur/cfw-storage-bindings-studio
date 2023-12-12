@@ -1,4 +1,5 @@
 <script>
+  import { getContext } from "svelte";
   import { createQuery } from "@tanstack/svelte-query";
   // @ts-ignore: Cannot find type declarations...why??
   import CodeMirror from "svelte-codemirror-editor";
@@ -6,6 +7,7 @@
   import { autocompletion } from "@codemirror/autocomplete";
   import { lineNumbers } from "@codemirror/view";
   import { sql, SQLite } from "@codemirror/lang-sql";
+  import { page } from "$app/stores";
   import { excludePrivateTableList } from "$lib/d1";
   import SqlResults from "./sql-results.svelte";
 
@@ -30,28 +32,22 @@
     return schema;
   };
 
-  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  export let D1;
-  /** @type {string} */
-  export let bindingName;
+  const { bindings } = getContext("appContext");
 
-  let replOpen = false;
-  /** @type {HTMLDialogElement} */
-  let dialogRef;
-  $: replOpen ? dialogRef?.showModal() : dialogRef?.close();
+  $: bindingName = $page.params.bindingName;
+  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
+  $: D1 = bindings[bindingName];
 
   $: tableSchemaQuery = createQuery({
     queryKey: ["d1", bindingName, "tableSchema"],
     queryFn: () => queryTableSchema(D1),
-    enabled: replOpen,
   });
 
-  let draftValue = "\n\n";
+  let draftValue = "SELECT * FROM \n\n";
   let sqlToRun = "";
 </script>
 
-<button on:click={() => (replOpen = true)}>REPL</button>
-<dialog bind:this={dialogRef} on:close={() => (replOpen = false)}>
+<section>
   {#if $tableSchemaQuery.isLoading}
     🌀 Loading table schema...
   {:else if $tableSchemaQuery.isError}
@@ -60,24 +56,32 @@
     <CodeMirror
       bind:value={draftValue}
       lang={sql({ dialect: SQLite, schema: $tableSchemaQuery.data })}
+      useTab={false}
       basic={false}
       extensions={[lineNumbers(), autocompletion()]}
     />
-    <div>
-      <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+    <div class="action">
       <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
         >Run</button
       >
+      <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
     </div>
+
     {#if sqlToRun !== ""}
       <SqlResults {D1} {bindingName} {sqlToRun} />
     {/if}
   {/if}
-</dialog>
+</section>
 
 <style>
-  dialog {
-    min-inline-size: 100dvw;
-    min-block-size: 100dvh;
+  section {
+    display: grid;
+    gap: var(--size-3);
+  }
+
+  .action {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--size-2);
   }
 </style>

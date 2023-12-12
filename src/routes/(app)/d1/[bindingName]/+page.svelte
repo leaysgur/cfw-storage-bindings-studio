@@ -1,4 +1,4 @@
-<p>Select a table to inspect.</p>
+<p>Select a table to inspect or REPL.</p>
 
 <style>
   p {

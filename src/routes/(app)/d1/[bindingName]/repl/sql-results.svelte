@@ -25,25 +25,42 @@
   {#if meta.changed_db}
     {meta.changes} rows are changed.
   {:else if results.length !== 0}
-    <table style="white-space: nowrap;" border={1}>
-      <thead>
-        <tr>
-          {#each Object.keys(results[0]) as column}
-            <th>{column}</th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each results as row}
+    <div class="scroller">
+      <table>
+        <thead>
           <tr>
-            {#each Object.values(row) as value}
-              <td>{value}</td>
+            {#each Object.keys(results[0]) as column}
+              <th>{column}</th>
             {/each}
           </tr>
-        {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#each results as row}
+            <tr>
+              {#each Object.values(row) as value}
+                <td>{value}</td>
+              {/each}
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   {:else}
     <p>No records...</p>
   {/if}
 {/if}
+
+<style>
+  .scroller {
+    overflow: auto;
+
+    & > table {
+      width: max-content;
+      font-family: var(--font-mono);
+    }
+
+    & > table td {
+      max-inline-size: unset;
+    }
+  }
+</style>
