@@ -1,64 +1,55 @@
 <script>
-  import { onMount, setContext } from "svelte";
-  import { getBindings } from "cfw-bindings-wrangler-bridge";
-  import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+  // Base
+  import "open-props/style";
+  import "open-props/normalize";
 
-  /** @type {Record<string, string>} */
-  const CTOR_TO_TYPE = {
-    D1Database$: "d1",
-    KVNamespace$: "kv",
-    R2Bucket$: "r2",
-  };
+  // Theme toggler
+  import "open-props/switch/dark";
+  import "open-props/switch/light";
 
-  /**
-   * @type {{
-   *   bindings: Record<string, Function>;
-   * }}
-   */
-  const appContext = {
-    bindings: {},
-  };
-  setContext("appContext", appContext);
-
-  let bindingsPromise = new Promise(() => {});
-  onMount(() => {
-    bindingsPromise = fetch("/settings.json")
-      .then((r) => r.json())
-      .then((j) => j.bridgeOrigin)
-      .then((bridgeWorkerOrigin) => getBindings({ bridgeWorkerOrigin }))
-      .then((bindings) => {
-        appContext.bindings = bindings;
-        // @ts-ignore: Just for debugging and demonstration purposes
-        globalThis.env = bindings;
-        return bindings;
-      });
-  });
+  let theme = "";
+  $: theme === ""
+    ? document.documentElement.removeAttribute("data-theme")
+    : document.documentElement.setAttribute("data-theme", theme);
 </script>
 
-{#await bindingsPromise}
-  🌀 Loading bindings...
-{:then}
-  <ul>
-    {#each Object.entries(appContext.bindings).sort( ([a], [b]) => a.localeCompare(b), ) as [name, binding]}
-      {@const type = CTOR_TO_TYPE[binding.constructor.name] ?? "-"}
-      <li>
-        <a href={`/${type}/${name}`}>
-          [{type}] {name}
-        </a>
-      </li>
-    {/each}
-  </ul>
-  <hr />
-  <QueryClientProvider client={new QueryClient()}>
-    <slot />
-  </QueryClientProvider>
-{:catch err}
-  <pre>💥 {err.message}</pre>
-{/await}
+<header>
+  <a href="/">/</a>
+
+  <div class="menu">
+    <label>
+      <span>Theme:</span>
+      <select bind:value={theme}>
+        <option value="">system</option>
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+      </select>
+    </label>
+
+    <a href="https://github.com/leaysgur/cfw-storage-bindings-studio" target="_blank">GitHub</a>
+  </div>
+</header>
+
+<main><slot /></main>
 
 <style>
-  :global(body) {
-    font-family: ui-monospace, monospace;
-    font-size: 0.875rem;
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--size-3);
+    padding-block: var(--size-2);
+    background-color: var(--gray-10);
+  }
+
+  .menu {
+    display: flex;
+    gap: var(--size-3);
+    align-items: center;
+    justify-content: space-between;
+
+    & > label > span {
+      color: var(--gray-1);
+    }
   }
 </style>

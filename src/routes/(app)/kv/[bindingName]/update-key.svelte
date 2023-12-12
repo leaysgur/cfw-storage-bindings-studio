@@ -57,8 +57,13 @@
           $putMutation.mutate(String(textValue));
         }}
       >
-        <textarea name="text-value">{$getQuery.data}</textarea>
-        OR <input type="file" name="binary-value" />
+        <label>
+          Value:
+          <div>
+            <textarea name="text-value">{$getQuery.data}</textarea>
+            OR <input type="file" name="binary-value" />
+          </div>
+        </label>
         <div>
           <button on:click={() => (editing = false)}>Cancel</button>
           <button type="submit" disabled={$putMutation.isPending}>Put</button>
@@ -69,3 +74,25 @@
 </dialog>
 
 <button on:click={() => (editing = true)}>Update</button>
+
+<style>
+  form {
+    display: grid;
+    gap: var(--size-3);
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: var(--size-8) minmax(0, 1fr);
+    gap: var(--size-2);
+
+    & > div {
+      display: grid;
+      gap: var(--size-2);
+    }
+  }
+
+  textarea {
+    resize: both;
+  }
+</style>

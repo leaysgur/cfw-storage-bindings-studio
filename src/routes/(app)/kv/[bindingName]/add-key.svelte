@@ -42,8 +42,29 @@
   </label>
   <label
     >Value:
-    <textarea name="text-value" />
-    OR <input type="file" name="binary-value" />
+    <div>
+      <textarea name="text-value" />
+      <span>OR</span>
+      <input type="file" name="binary-value" />
+    </div>
   </label>
   <button type="submit" disabled={$putMutation.isPending}>Put</button>
 </form>
+
+<style>
+  form {
+    display: grid;
+    gap: var(--size-3);
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: var(--size-8) minmax(0, 1fr);
+    gap: var(--size-2);
+
+    & > div {
+      display: grid;
+      gap: var(--size-2);
+    }
+  }
+</style>

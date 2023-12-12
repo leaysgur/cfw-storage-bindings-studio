@@ -41,20 +41,26 @@
     <pre>🙈 Value was `null`...</pre>
   {:else}
     <textarea readonly disabled>{decodeText($getQuery.data)}</textarea>
-    <div>
+    <div class="view-as">
+      View as:
       {#each VIEW_TYPES as viewType}
-        <button on:click={() => (viewAs = viewType)} style="font-size: .6rem">{viewType}</button>
+        <button on:click={() => (viewAs = viewType)}>{viewType}</button>
       {/each}
     </div>
 
-    <dialog
-      bind:this={dialogRef}
-      on:close={() => (viewAs = null)}
-      style="overflow: auto; max-block-size: 80dvh; max-inline-size: 80dvw;"
-    >
+    <dialog bind:this={dialogRef} on:close={() => (viewAs = null)}>
       {#if viewAs === "json"}
         <pre>{prettifyJSON($getQuery.data)}</pre>
       {/if}
     </dialog>
   {/if}
 {/if}
+
+<style>
+  textarea {
+    resize: both;
+  }
+  .view-as {
+    font-size: var(--font-size-0);
+  }
+</style>
