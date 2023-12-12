@@ -36,6 +36,7 @@
     "@codemirror/lang-sql": "^6.5.4",
     "@tanstack/svelte-query": "^5.13.4",
     "cfw-bindings-wrangler-bridge": "^0.10.1",
+    "codemirror": "^6.0.1",
     "open-props": "^1.6.16",
     "svelte-codemirror-editor": "^1.2.0",
     "wrangler": "^3.19.0"

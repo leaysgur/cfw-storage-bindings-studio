@@ -19,40 +19,73 @@
   });
 </script>
 
-d1/{bindingName}/{tableName}
+<section>
+  <h3>
+    {tableName}
+  </h3>
 
-<button
-  disabled={$rowsQuery.isFetching}
-  on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
->
+  {#if $rowsQuery.isLoading}
+    🌀 Loading rows...
+  {:else if $rowsQuery.isError}
+    <pre>💥 {$rowsQuery.error.message}</pre>
+  {:else if $rowsQuery.isSuccess}
+    {@const rows = $rowsQuery.data}
 
-{#if $rowsQuery.isLoading}
-  🌀 Loading rows...
-{:else if $rowsQuery.isError}
-  <pre>💥 {$rowsQuery.error.message}</pre>
-{:else if $rowsQuery.isSuccess}
-  {@const rows = $rowsQuery.data}
+    <div class="action">
+      <button
+        disabled={$rowsQuery.isFetching}
+        on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
+      >
+    </div>
 
-  {#if rows.length !== 0}
-    <table style="white-space: nowrap;" border={1}>
-      <thead>
-        <tr>
-          {#each Object.keys(rows[0]) as column}
-            <th>{column}</th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each rows as row}
-          <tr>
-            {#each Object.values(row) as value}
-              <td>{value}</td>
+    {#if rows.length !== 0}
+      <div class="scroller">
+        <table>
+          <thead>
+            <tr>
+              {#each Object.keys(rows[0]) as column}
+                <th>{column}</th>
+              {/each}
+            </tr>
+          </thead>
+          <tbody>
+            {#each rows as row}
+              <tr>
+                {#each Object.values(row) as value}
+                  <td>{value}</td>
+                {/each}
+              </tr>
             {/each}
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  {:else}
-    <p>No records...</p>
+          </tbody>
+        </table>
+      </div>
+    {:else}
+      <p>No records...</p>
+    {/if}
   {/if}
-{/if}
+</section>
+
+<style>
+  section {
+    display: grid;
+    gap: var(--size-3);
+  }
+
+  .action {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .scroller {
+    overflow: auto;
+
+    & > table {
+      width: max-content;
+      font-family: var(--font-mono);
+    }
+
+    & > table td {
+      max-inline-size: unset;
+    }
+  }
+</style>

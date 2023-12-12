@@ -2,6 +2,9 @@
   import { createQuery } from "@tanstack/svelte-query";
   // @ts-ignore: Cannot find type declarations...why??
   import CodeMirror from "svelte-codemirror-editor";
+  // XXX: `basic-setup` is not working...why???
+  import { autocompletion } from "@codemirror/autocomplete";
+  import { lineNumbers } from "@codemirror/view";
   import { sql, SQLite } from "@codemirror/lang-sql";
   import { excludePrivateTableList } from "$lib/d1";
   import SqlResults from "./sql-results.svelte";
@@ -48,11 +51,7 @@
 </script>
 
 <button on:click={() => (replOpen = true)}>REPL</button>
-<dialog
-  bind:this={dialogRef}
-  on:close={() => (replOpen = false)}
-  style="overflow: auto; block-size: 80dvh; inline-size: 80dvw;"
->
+<dialog bind:this={dialogRef} on:close={() => (replOpen = false)}>
   {#if $tableSchemaQuery.isLoading}
     🌀 Loading table schema...
   {:else if $tableSchemaQuery.isError}
@@ -61,13 +60,24 @@
     <CodeMirror
       bind:value={draftValue}
       lang={sql({ dialect: SQLite, schema: $tableSchemaQuery.data })}
+      basic={false}
+      extensions={[lineNumbers(), autocompletion()]}
     />
-    <hr />
-    <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
-    <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}>Run</button>
-    <hr />
+    <div>
+      <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+      <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
+        >Run</button
+      >
+    </div>
     {#if sqlToRun !== ""}
       <SqlResults {D1} {bindingName} {sqlToRun} />
     {/if}
   {/if}
 </dialog>
+
+<style>
+  dialog {
+    min-inline-size: 100dvw;
+    min-block-size: 100dvh;
+  }
+</style>

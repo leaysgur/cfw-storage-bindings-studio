@@ -13,26 +13,34 @@
     : document.documentElement.setAttribute("data-theme", theme);
 </script>
 
-<header>
-  <a href="/">/</a>
+<div class="root">
+  <header>
+    <a href="/">/</a>
 
-  <div class="menu">
-    <label>
-      <span>Theme:</span>
-      <select bind:value={theme}>
-        <option value="">system</option>
-        <option value="light">light</option>
-        <option value="dark">dark</option>
-      </select>
-    </label>
+    <div class="menu">
+      <label>
+        <span>Theme:</span>
+        <select bind:value={theme}>
+          <option value="">system</option>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+      </label>
 
-    <a href="https://github.com/leaysgur/cfw-storage-bindings-studio" target="_blank">GitHub</a>
-  </div>
-</header>
+      <a href="https://github.com/leaysgur/cfw-storage-bindings-studio" target="_blank">GitHub</a>
+    </div>
+  </header>
 
-<main><slot /></main>
+  <main><slot /></main>
+</div>
 
 <style>
+  .root {
+    display: grid;
+    grid-template-rows: max-content minmax(0, 1fr);
+    min-block-size: 100dvh;
+  }
+
   header {
     display: flex;
     align-items: center;
@@ -51,5 +59,10 @@
     & > label > span {
       color: var(--gray-1);
     }
+  }
+
+  main {
+    display: grid;
+    grid-template-rows: max-content minmax(0, 1fr);
   }
 </style>

@@ -30,7 +30,7 @@
 
 <section>
   <h2>
-    [kv] {$page.params.bindingName}
+    [KV] {$page.params.bindingName}
   </h2>
 
   <details>
@@ -113,9 +113,10 @@
   }
 
   .scroller {
-    overflow-x: auto;
+    overflow: auto;
 
     & > table {
+      font-family: var(--font-mono);
       width: max-content;
     }
 

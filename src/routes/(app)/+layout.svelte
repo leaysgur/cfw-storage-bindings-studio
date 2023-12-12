@@ -5,9 +5,9 @@
 
   /** @type {Record<string, string>} */
   const CTOR_TO_TYPE = {
-    D1Database$: "d1",
-    KVNamespace$: "kv",
-    R2Bucket$: "r2",
+    D1Database$: "D1",
+    KVNamespace$: "KV",
+    R2Bucket$: "R2",
   };
 
   /**
@@ -43,7 +43,7 @@
       {#each Object.entries(appContext.bindings).sort( ([a], [b]) => a.localeCompare(b), ) as [name, binding]}
         {@const type = CTOR_TO_TYPE[binding.constructor.name] ?? "-"}
         <li>
-          <a href={`/${type}/${name}`}>
+          <a href={`/${type.toLowerCase()}/${name}`}>
             [{type}] {name}
           </a>
         </li>
