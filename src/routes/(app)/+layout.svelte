@@ -62,5 +62,6 @@
   .selector {
     padding-block: var(--size-3);
     border-bottom: var(--border-size-1) solid var(--indigo-2);
+    background-color: var(--gray-10);
   }
 </style>

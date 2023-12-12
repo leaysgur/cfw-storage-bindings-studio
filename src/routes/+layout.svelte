@@ -39,7 +39,7 @@
     justify-content: space-between;
     padding-inline: var(--size-3);
     padding-block: var(--size-2);
-    background-color: var(--gray-10);
+    background-color: var(--gray-11);
   }
 
   .menu {
