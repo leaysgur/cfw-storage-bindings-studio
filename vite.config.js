@@ -8,6 +8,6 @@ export default defineConfig({
     keepNames: true,
   },
   optimizeDeps: {
-    exclude: ["codemirror", "@codemirror/language-sql"],
+    exclude: ["codemirror", "@codemirror/*"],
   },
 });
