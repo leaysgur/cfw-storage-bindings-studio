@@ -32,7 +32,7 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./
 - [x] CLI <-> APP
 - [x] List bindings
 - [ ] Svelte 5 migration(blocked by svelte-query) 🔥
-- [ ] Fancy UI
+- [x] Fancy UI(temp)
 - [x] KV.list
 - [x] KV.get
 - [x] Better details by MIME
