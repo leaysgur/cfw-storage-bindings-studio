@@ -1,0 +1,1 @@
+var r=Object.defineProperty;var e=(t,s)=>r(t,"name",{value:s,configurable:!0});const c=e(t=>t.filter(([s,i,a])=>s==="main"&&!(i.startsWith("_cf")||i.startsWith("sqlite_")||i.startsWith("d1_"))&&a==="table"),"excludePrivateTableList");export{c as e};
