@@ -1,11 +1,12 @@
 <script>
   import { getContext } from "svelte";
   import { createQuery } from "@tanstack/svelte-query";
-  // @ts-ignore: Cannot find type declarations...why??
+  // @ts-ignore: Cannot find type declarations...why?
   import CodeMirror from "svelte-codemirror-editor";
-  // XXX: `basic-setup` is not working...why???
+  // XXX: `basic-setup` is not working...why??
   import { autocompletion } from "@codemirror/autocomplete";
-  import { lineNumbers } from "@codemirror/view";
+  import { lineNumbers, highlightActiveLine, highlightActiveLineGutter } from "@codemirror/view";
+  import { defaultHighlightStyle, syntaxHighlighting } from "@codemirror/language";
   import { sql, SQLite } from "@codemirror/lang-sql";
   import { page } from "$app/stores";
   import { excludePrivateTableList } from "$lib/d1";
@@ -53,30 +54,42 @@
   {:else if $tableSchemaQuery.isError}
     <pre>💥 {$tableSchemaQuery.error.message}</pre>
   {:else if $tableSchemaQuery.isSuccess}
-    <CodeMirror
-      bind:value={draftValue}
-      lang={sql({ dialect: SQLite, schema: $tableSchemaQuery.data })}
-      useTab={false}
-      basic={false}
-      extensions={[lineNumbers(), autocompletion()]}
-    />
-    <div class="action">
-      <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
-        >Run</button
-      >
-      <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+    <div class="editor">
+      <CodeMirror
+        bind:value={draftValue}
+        lang={sql({ dialect: SQLite, schema: $tableSchemaQuery.data })}
+        useTab={false}
+        basic={false}
+        extensions={[
+          lineNumbers(),
+          highlightActiveLine(),
+          highlightActiveLineGutter(),
+          syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+          autocompletion(),
+        ]}
+        styles={{ "&": { backgroundColor: "var(--gray-1)", color: "var(--gray-9)" } }}
+      />
+      <div class="action">
+        <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
+          >Run</button
+        >
+        <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+      </div>
     </div>
-
-    {#if sqlToRun !== ""}
-      <SqlResults {D1} {bindingName} {sqlToRun} />
-    {/if}
   {/if}
+
+  <SqlResults {D1} {bindingName} {sqlToRun} />
 </section>
 
 <style>
   section {
     display: grid;
-    gap: var(--size-3);
+    gap: var(--size-4);
+  }
+
+  .editor {
+    display: grid;
+    gap: var(--size-2);
   }
 
   .action {

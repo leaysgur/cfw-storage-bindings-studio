@@ -12,6 +12,7 @@
   $: sqlResultsQuery = createQuery({
     queryKey: ["d1", bindingName, "sqlResults", sqlToRun],
     queryFn: () => D1.prepare(sqlToRun).all(),
+    enabled: sqlToRun !== "",
   });
 </script>
 
@@ -30,7 +31,7 @@
         <thead>
           <tr>
             {#each Object.keys(results[0]) as column}
-              <th>{column}</th>
+              <th align="left">{column}</th>
             {/each}
           </tr>
         </thead>
@@ -38,7 +39,7 @@
           {#each results as row}
             <tr>
               {#each Object.values(row) as value}
-                <td>{value}</td>
+                <td align="left">{value}</td>
               {/each}
             </tr>
           {/each}
