@@ -20,7 +20,7 @@
   };
   setContext("appContext", appContext);
 
-  let bindingsPromise = new Promise(() => {});
+  let bindingsPromise = $state(new Promise(() => {}));
   onMount(() => {
     bindingsPromise = fetch("/settings.json")
       .then((r) => r.json())

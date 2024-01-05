@@ -7,10 +7,12 @@
   import "open-props/switch/dark";
   import "open-props/switch/light";
 
-  let theme = "";
-  $: theme === ""
-    ? document.documentElement.removeAttribute("data-theme")
-    : document.documentElement.setAttribute("data-theme", theme);
+  let theme = $state("");
+  $effect(() => {
+    theme === ""
+      ? document.documentElement.removeAttribute("data-theme")
+      : document.documentElement.setAttribute("data-theme", theme);
+  });
 </script>
 
 <div class="root">
@@ -55,10 +57,10 @@
     gap: var(--size-3);
     align-items: center;
     justify-content: space-between;
-
-    & > label > span {
-      color: var(--gray-1);
-    }
+  }
+  /* Nesting is not supported by v5 for now */
+  .menu > label > span {
+    color: var(--gray-1);
   }
 
   main {
