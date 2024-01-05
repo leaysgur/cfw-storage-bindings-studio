@@ -1,11 +1,14 @@
 <script>
   import { createQuery } from "@tanstack/svelte-query";
 
-  let { D1, bindingName, sqlToRun } = /** @type {{
-    D1: import("@cloudflare/workers-types/experimental").D1Database,
-    bindingName: string;
-    sqlToRun: string;
-  }} */ ($props());
+  /**
+   * @type {{
+   *   D1: import("@cloudflare/workers-types/experimental").D1Database;
+   *   bindingName: string;
+   *   sqlToRun: string;
+   * }}
+   */
+  let { D1, bindingName, sqlToRun } = $props();
 
   let sqlResultsQuery = $derived(
     createQuery({
@@ -57,10 +60,10 @@
   }
   /* FIX: Once CSS Nesting is supported */
   .scroller > table {
-      width: max-content;
-      font-family: var(--font-mono);
+    width: max-content;
+    font-family: var(--font-mono);
   }
   .scroller > table td {
-      max-inline-size: unset;
+    max-inline-size: unset;
   }
 </style>

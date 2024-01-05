@@ -1,12 +1,14 @@
 <script>
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
 
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  export let KV;
-  /** @type {string} */
-  export let bindingName;
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>} */
-  export let key;
+  /** 
+   * @type {{
+   *   KV: import("@cloudflare/workers-types/experimental").KVNamespace;
+   *   bindingName: string;
+   *   key: import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>;
+   * }} 
+   */
+  let { KV, bindingName, key } = $props();
 
   const queryClient = useQueryClient();
   const deleteMutation = createMutation({
