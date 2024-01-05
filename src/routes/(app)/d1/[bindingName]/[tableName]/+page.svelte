@@ -14,7 +14,7 @@
   $: queryKey = ["d1", bindingName, "tables", tableName];
   $: rowsQuery = createQuery({
     queryKey,
-    queryFn: () => D1.prepare(`SELECT ROWID, * FROM ${tableName}`).all(),
+    queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
     select: (data) => data.results,
   });
 </script>
@@ -44,15 +44,19 @@
           <thead>
             <tr>
               {#each Object.keys(rows[0]) as column}
-                <th align="left">{column}</th>
+                {#if column !== "_id"}
+                  <th align="left">{column}</th>
+                {/if}
               {/each}
             </tr>
           </thead>
           <tbody>
-            {#each rows as row (row.rowid)}
+            {#each rows as row (row._id)}
               <tr>
-                {#each Object.values(row) as value}
-                  <td align="left">{value}</td>
+                {#each Object.entries(row) as [key, value]}
+                  {#if key !== "_id"}
+                    <td align="left">{value}</td>
+                  {/if}
                 {/each}
               </tr>
             {/each}
