@@ -7,6 +7,9 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
+  /** @type {{ children: import("svelte").Snippet }} */
+  let { children } = $props();
+
   let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
   let D1 = $derived(bindings[bindingName]);
@@ -56,9 +59,7 @@
       </ul>
     </div>
   {/if}
-  <div class="main">
-    <slot />
-  </div>
+  <div class="main">{@render children()}</div>
 </section>
 
 <style>
