@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: space-between;
   }
-  /* Nesting is not supported by v5 for now */
+  /* FIX: Once CSS Nesting is supported */
   .menu > label > span {
     color: var(--gray-1);
   }
