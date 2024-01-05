@@ -1,19 +1,19 @@
 <script>
   import { createQuery } from "@tanstack/svelte-query";
 
-  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  export let D1;
-  /** @type {string} */
-  export let bindingName;
+  let { D1, bindingName, sqlToRun } = /** @type {{
+    D1: import("@cloudflare/workers-types/experimental").D1Database,
+    bindingName: string;
+    sqlToRun: string;
+  }} */ ($props());
 
-  /** @type {string} */
-  export let sqlToRun;
-
-  $: sqlResultsQuery = createQuery({
-    queryKey: ["d1", bindingName, "sqlResults", sqlToRun],
-    queryFn: () => D1.prepare(sqlToRun).all(),
-    enabled: sqlToRun !== "",
-  });
+  let sqlResultsQuery = $derived(
+    createQuery({
+      queryKey: ["d1", bindingName, "sqlResults", sqlToRun],
+      queryFn: () => D1.prepare(sqlToRun).all(),
+      enabled: sqlToRun !== "",
+    }),
+  );
 </script>
 
 {#if $sqlResultsQuery.isLoading}
@@ -54,14 +54,13 @@
 <style>
   .scroller {
     overflow: auto;
-
-    & > table {
+  }
+  /* FIX: Once CSS Nesting is supported */
+  .scroller > table {
       width: max-content;
       font-family: var(--font-mono);
-    }
-
-    & > table td {
+  }
+  .scroller > table td {
       max-inline-size: unset;
-    }
   }
 </style>

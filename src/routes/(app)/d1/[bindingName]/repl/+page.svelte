@@ -35,17 +35,19 @@
 
   const { bindings } = getContext("appContext");
 
-  $: bindingName = $page.params.bindingName;
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  let D1 = $derived(bindings[bindingName]);
 
-  $: tableSchemaQuery = createQuery({
-    queryKey: ["d1", bindingName, "tableSchema"],
-    queryFn: () => queryTableSchema(D1),
-  });
+  let tableSchemaQuery = $derived(
+    createQuery({
+      queryKey: ["d1", bindingName, "tableSchema"],
+      queryFn: () => queryTableSchema(D1),
+    }),
+  );
 
-  let draftValue = "SELECT * FROM \n\n";
-  let sqlToRun = "";
+  let draftValue = $state("SELECT * FROM \n\n");
+  let sqlToRun = $state("");
 </script>
 
 <section>

@@ -6,17 +6,17 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
-  $: bindingName = $page.params.bindingName;
-  $: tableName = $page.params.tableName;
+  let tableName = $derived($page.params.tableName);
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  let D1 = $derived(bindings[bindingName]);
 
-  $: queryKey = ["d1", bindingName, "tables", tableName];
-  $: rowsQuery = createQuery({
+  let queryKey = $derived(["d1", bindingName, "tables", tableName]);
+  let rowsQuery = $derived(createQuery({
     queryKey,
     queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
     select: (data) => data.results,
-  });
+  }));
 </script>
 
 <section>
@@ -82,14 +82,13 @@
 
   .scroller {
     overflow: auto;
-
-    & > table {
+  }
+  /* FIX: Once CSS Nesting is supported */
+  .scroller > table {
       width: max-content;
       font-family: var(--font-mono);
-    }
-
-    & > table td {
+  }
+  .scroller > table td {
       max-inline-size: unset;
-    }
   }
 </style>

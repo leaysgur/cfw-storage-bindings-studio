@@ -7,19 +7,21 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
-  $: bindingName = $page.params.bindingName;
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  let D1 = $derived(bindings[bindingName]);
 
-  $: queryKey = ["d1", bindingName, "tables"];
-  $: tablesQuery = createQuery({
-    queryKey,
-    queryFn: () =>
-      D1.prepare("PRAGMA table_list")
-        .raw()
-        .then((rows) => /** @type {string[][]} */ (rows)),
-    select: (data) => excludePrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
-  });
+  let queryKey = $derived(["d1", bindingName, "tables"]);
+  let tablesQuery = $derived(
+    createQuery({
+      queryKey,
+      queryFn: () =>
+        D1.prepare("PRAGMA table_list")
+          .raw()
+          .then((rows) => /** @type {string[][]} */ (rows)),
+      select: (data) => excludePrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
+    }),
+  );
 </script>
 
 <section>
