@@ -105,6 +105,7 @@
     gap: var(--size-4);
     padding-block: var(--size-2);
     padding-inline: var(--size-3);
+    align-content: start;
   }
 
   .action {
