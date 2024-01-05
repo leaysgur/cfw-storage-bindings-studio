@@ -2,25 +2,29 @@
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
   import { decodeText, encodeText } from "$lib/utils.js";
 
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  export let KV;
-  /** @type {string} */
-  export let bindingName;
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>} */
-  export let key;
+  /**
+   * @type {{
+   *   KV: import("@cloudflare/workers-types/experimental").KVNamespace;
+   *   bindingName: string;
+   *   key: import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>;
+   * }}
+   */
+  let { KV, bindingName, key } = $props();
 
-  let editing = false;
+  let editing = $state(false);
 
-  /** @type {HTMLDialogElement} */
-  let dialogRef;
-  $: editing ? dialogRef?.showModal() : dialogRef?.close();
+  /** @type {HTMLDialogElement | null} */
+  let dialogRef = $state(null);
+  $effect(() => (editing ? dialogRef?.showModal() : dialogRef?.close()));
 
-  $: getQuery = createQuery({
-    queryKey: ["kv", bindingName, key.name],
-    queryFn: () => KV.get(key.name, "arrayBuffer"),
-    enabled: editing,
-    select: (data) => (data === null ? null : decodeText(data)),
-  });
+  let getQuery = $derived(
+    createQuery({
+      queryKey: ["kv", bindingName, key.name],
+      queryFn: () => KV.get(key.name, "arrayBuffer"),
+      enabled: editing,
+      select: (data) => (data === null ? null : decodeText(data)),
+    }),
+  );
 
   const queryClient = useQueryClient();
   const putMutation = createMutation({
@@ -85,11 +89,11 @@
     display: grid;
     grid-template-columns: var(--size-8) minmax(0, 1fr);
     gap: var(--size-2);
-
-    & > div {
-      display: grid;
-      gap: var(--size-2);
-    }
+  }
+  /* FIX: Once CSS Nesting is supported */
+  label > div {
+    display: grid;
+    gap: var(--size-2);
   }
 
   textarea {

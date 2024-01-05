@@ -7,10 +7,15 @@
   import "open-props/switch/dark";
   import "open-props/switch/light";
 
-  let theme = "";
-  $: theme === ""
-    ? document.documentElement.removeAttribute("data-theme")
-    : document.documentElement.setAttribute("data-theme", theme);
+  /** @type {{ children: import("svelte").Snippet }} */
+  let { children } = $props();
+
+  let theme = $state("");
+  $effect(() => {
+    theme === ""
+      ? document.documentElement.removeAttribute("data-theme")
+      : document.documentElement.setAttribute("data-theme", theme);
+  });
 </script>
 
 <div class="root">
@@ -31,7 +36,7 @@
     </div>
   </header>
 
-  <main><slot /></main>
+  <main>{@render children()}</main>
 </div>
 
 <style>
@@ -55,10 +60,10 @@
     gap: var(--size-3);
     align-items: center;
     justify-content: space-between;
-
-    & > label > span {
-      color: var(--gray-1);
-    }
+  }
+  /* FIX: Once CSS Nesting is supported */
+  .menu > label > span {
+    color: var(--gray-1);
   }
 
   main {

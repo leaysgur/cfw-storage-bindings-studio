@@ -20,7 +20,10 @@
   };
   setContext("appContext", appContext);
 
-  let bindingsPromise = new Promise(() => {});
+  /** @type {{ children: import("svelte").Snippet }} */
+  let { children } = $props();
+
+  let bindingsPromise = $state(new Promise(() => {}));
   onMount(() => {
     bindingsPromise = fetch("/settings.json")
       .then((r) => r.json())
@@ -52,7 +55,7 @@
   </div>
 
   <QueryClientProvider client={new QueryClient()}>
-    <slot />
+    {@render children()}
   </QueryClientProvider>
 {:catch err}
   <pre>💥 {err.message}</pre>
