@@ -1,0 +1,1 @@
+var i=Object.defineProperty;var r=(t,f)=>i(t,"name",{value:f,configurable:!0});import{b as n,E as p,c,d as o}from"./runtime.PM082qKs.js";function l(t,f,...a){var e,s;n(()=>{e!==(e=t())&&(s&&(o(s),s=null),e&&(s=c(()=>e(f,...a))))},p)}r(l,"snippet");export{l as s};
