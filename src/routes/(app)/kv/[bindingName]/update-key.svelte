@@ -51,7 +51,9 @@
       <button onclick={() => (editing = false)}>Cancel</button>
     {:else}
       <form
-        on:submit|preventDefault={(ev) => {
+        onsubmit={(ev) => {
+          ev.preventDefault();
+
           const data = new FormData(ev.currentTarget);
           const [textValue, binaryValue] = [data.get("text-value"), data.get("binary-value")];
 

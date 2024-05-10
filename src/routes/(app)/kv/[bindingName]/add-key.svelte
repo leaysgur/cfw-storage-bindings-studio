@@ -27,7 +27,9 @@
 </script>
 
 <form
-  on:submit|preventDefault={(ev) => {
+  onsubmit={(ev) => {
+    ev.preventDefault();
+
     const data = new FormData(ev.currentTarget);
     const [key, textValue, binaryValue] = [
       data.get("key"),
@@ -48,7 +50,7 @@
   <label
     >Value:
     <div>
-      <textarea name="text-value" />
+      <textarea name="text-value"></textarea>
       <span>OR</span>
       <input type="file" name="binary-value" />
     </div>
