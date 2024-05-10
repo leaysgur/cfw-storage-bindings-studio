@@ -68,10 +68,10 @@
     display: grid;
     grid-template-columns: var(--size-8) minmax(0, 1fr);
     gap: var(--size-2);
-  }
-  /* FIX: Once CSS Nesting is supported */
-  label > div {
-    display: grid;
-    gap: var(--size-2);
+
+    div {
+      display: grid;
+      gap: var(--size-2);
+    }
   }
 </style>

@@ -117,13 +117,14 @@
 
   .scroller {
     overflow: auto;
-  }
-  /* FIX: Once CSS Nesting is supported */
-  .scroller > table {
+
+    table {
       width: max-content;
       font-family: var(--font-mono);
-  }
-  .scroller > table td {
-      max-inline-size: unset;
+
+      td {
+        max-inline-size: unset;
+      }
+    }
   }
 </style>

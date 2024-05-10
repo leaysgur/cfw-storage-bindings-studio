@@ -60,10 +60,12 @@
     gap: var(--size-3);
     align-items: center;
     justify-content: space-between;
-  }
-  /* FIX: Once CSS Nesting is supported */
-  .menu > label > span {
-    color: var(--gray-1);
+
+    label {
+      span {
+        color: var(--gray-1);
+      }
+    }
   }
 
   main {

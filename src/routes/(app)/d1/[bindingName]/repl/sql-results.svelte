@@ -57,13 +57,14 @@
 <style>
   .scroller {
     overflow: auto;
-  }
-  /* FIX: Once CSS Nesting is supported */
-  .scroller > table {
-    width: max-content;
-    font-family: var(--font-mono);
-  }
-  .scroller > table td {
-    max-inline-size: unset;
+
+    table {
+      width: max-content;
+      font-family: var(--font-mono);
+
+      td {
+        max-inline-size: unset;
+      }
+    }
   }
 </style>

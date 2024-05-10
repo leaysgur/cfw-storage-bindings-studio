@@ -12,11 +12,13 @@
   let D1 = $derived(bindings[bindingName]);
 
   let queryKey = $derived(["d1", bindingName, "tables", tableName]);
-  let rowsQuery = $derived(createQuery({
-    queryKey,
-    queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
-    select: (data) => data.results,
-  }));
+  let rowsQuery = $derived(
+    createQuery({
+      queryKey,
+      queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
+      select: (data) => data.results,
+    }),
+  );
 </script>
 
 <section>
@@ -82,13 +84,14 @@
 
   .scroller {
     overflow: auto;
-  }
-  /* FIX: Once CSS Nesting is supported */
-  .scroller > table {
+
+    table {
       width: max-content;
       font-family: var(--font-mono);
-  }
-  .scroller > table td {
-      max-inline-size: unset;
+
+      td {
+        max-inline-size: unset;
+      }
+    }
   }
 </style>
