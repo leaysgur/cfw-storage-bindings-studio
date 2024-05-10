@@ -40,7 +40,7 @@
     <div class="action">
       <button
         disabled={$tablesQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh tables list</button
+        onclick={() => queryClient.invalidateQueries({ queryKey })}>Refresh tables list</button
       >
     </div>
 

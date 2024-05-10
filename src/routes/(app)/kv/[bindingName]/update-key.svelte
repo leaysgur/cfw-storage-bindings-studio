@@ -40,7 +40,7 @@
   });
 </script>
 
-<dialog bind:this={dialogRef} on:close={() => (editing = false)}>
+<dialog bind:this={dialogRef} onclose={() => (editing = false)}>
   {#if $getQuery.isLoading}
     🌀 Loading value...
   {:else if $getQuery.isError}
@@ -48,7 +48,7 @@
   {:else if $getQuery.isSuccess}
     {#if $getQuery.data === null}
       <pre>🙈 Value was `null`</pre>
-      <button on:click={() => (editing = false)}>Cancel</button>
+      <button onclick={() => (editing = false)}>Cancel</button>
     {:else}
       <form
         on:submit|preventDefault={(ev) => {
@@ -69,7 +69,7 @@
           </div>
         </label>
         <div>
-          <button on:click={() => (editing = false)}>Cancel</button>
+          <button onclick={() => (editing = false)}>Cancel</button>
           <button type="submit" disabled={$putMutation.isPending}>Put</button>
         </div>
       </form>
@@ -77,7 +77,7 @@
   {/if}
 </dialog>
 
-<button on:click={() => (editing = true)}>Update</button>
+<button onclick={() => (editing = true)}>Update</button>
 
 <style>
   form {

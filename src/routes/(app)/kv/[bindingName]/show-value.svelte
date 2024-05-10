@@ -48,11 +48,11 @@
     <div class="view-as">
       View as:
       {#each VIEW_TYPES as viewType}
-        <button on:click={() => (viewAs = viewType)}>{viewType}</button>
+        <button onclick={() => (viewAs = viewType)}>{viewType}</button>
       {/each}
     </div>
 
-    <dialog bind:this={dialogRef} on:close={() => (viewAs = null)}>
+    <dialog bind:this={dialogRef} onclose={() => (viewAs = null)}>
       {#if viewAs === "json"}
         <pre>{prettifyJSON($getQuery.data)}</pre>
       {/if}

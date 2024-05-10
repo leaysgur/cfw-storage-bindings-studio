@@ -53,7 +53,7 @@
 
       <button
         disabled={$listQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}
+        onclick={() => queryClient.invalidateQueries({ queryKey })}
       >
         Refresh all
       </button>
@@ -77,7 +77,7 @@
                   <td align="left"><ShowValue {KV} {bindingName} {key} /></td>
                   <td>
                     <button
-                      on:click={() =>
+                      onclick={() =>
                         queryClient.invalidateQueries({ queryKey: ["kv", bindingName, key.name] })}
                       >Refresh</button
                     >
@@ -94,7 +94,7 @@
       </table>
     </div>
     {#if $listQuery.hasNextPage}
-      <button disabled={$listQuery.isFetchingNextPage} on:click={() => $listQuery.fetchNextPage()}>
+      <button disabled={$listQuery.isFetchingNextPage} onclick={() => $listQuery.fetchNextPage()}>
         Load more
       </button>
     {/if}

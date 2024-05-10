@@ -34,7 +34,7 @@
     <div class="action">
       <button
         disabled={$rowsQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
+        onclick={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
       >
     </div>
 

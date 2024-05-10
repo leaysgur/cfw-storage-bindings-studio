@@ -72,10 +72,10 @@
         styles={{ "&": { backgroundColor: "var(--gray-1)", color: "var(--gray-9)" } }}
       />
       <div class="action">
-        <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
+        <button onclick={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
           >Run</button
         >
-        <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+        <button onclick={() => (draftValue = sqlToRun = "")}>Clear</button>
       </div>
     </div>
   {/if}
