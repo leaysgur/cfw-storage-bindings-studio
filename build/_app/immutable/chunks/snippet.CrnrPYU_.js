@@ -1,0 +1,1 @@
+var f=Object.defineProperty;var t=(e,n)=>f(e,"name",{value:n,configurable:!0});import{b as i,E as p,d as c,n as d,e as h,h as E,g as _}from"./runtime.DGYXNv_o.js";function u(e,n,...o){var s=e,r=d,a;i(()=>{r!==(r=n())&&(a&&(h(a),a=null),a=c(()=>r(s,...o)))},p),E&&(s=_)}t(u,"snippet");export{u as s};

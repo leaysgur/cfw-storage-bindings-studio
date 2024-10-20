@@ -1,0 +1,1 @@
+var o=Object.defineProperty;var e=(t,p)=>o(t,"name",{value:p,configurable:!0});import{a,t as s}from"../chunks/disclose-version.BbL9ofby.js";var n=s('<p class="svelte-1lwcthy">😢 This type of binding is not supported yet...</p>');function c(t){var p=n();a(t,p)}e(c,"_page");export{c as component};

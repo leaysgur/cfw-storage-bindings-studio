@@ -1,0 +1,1 @@
+var p=Object.defineProperty;var e=(t,a)=>p(t,"name",{value:a,configurable:!0});import{a as o,t as r}from"../chunks/disclose-version.BbL9ofby.js";var s=r('<p class="svelte-1lwcthy">Select a table to inspect or REPL.</p>');function n(t){var a=s();o(t,a)}e(n,"_page");export{n as component};

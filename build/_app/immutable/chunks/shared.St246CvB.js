@@ -1,0 +1,1 @@
+var e=Object.defineProperty;var s=(_,r)=>e(_,"name",{value:r,configurable:!0});import{a as i}from"./misc.DaK-wyZN.js";function f(_,r,o,t=o){_.addEventListener(r,o);const n=_.__on_r;n?_.__on_r=()=>{n(),t()}:_.__on_r=t,i()}s(f,"listen_to_event_and_reset_event");export{f as l};
