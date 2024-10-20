@@ -38,7 +38,7 @@ npm run dev
 - [x] CLI
 - [x] CLI <-> APP
 - [x] List bindings
-- [ ] Svelte 5 migration(blocked by svelte-query) 🔥
+- [x] Svelte 5 migration(blocked by svelte-query) 🔥
 - [x] Fancy UI(temp)
 - [x] KV.list
 - [x] KV.get
