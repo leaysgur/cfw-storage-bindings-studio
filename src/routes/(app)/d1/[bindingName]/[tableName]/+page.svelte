@@ -6,17 +6,19 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
-  $: bindingName = $page.params.bindingName;
-  $: tableName = $page.params.tableName;
+  let tableName = $derived($page.params.tableName);
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  let D1 = $derived(bindings[bindingName]);
 
-  $: queryKey = ["d1", bindingName, "tables", tableName];
-  $: rowsQuery = createQuery({
-    queryKey,
-    queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
-    select: (data) => data.results,
-  });
+  let queryKey = $derived(["d1", bindingName, "tables", tableName]);
+  let rowsQuery = $derived(
+    createQuery({
+      queryKey,
+      queryFn: () => D1.prepare(`SELECT ROWID AS _id, * FROM ${tableName}`).all(),
+      select: (data) => data.results,
+    }),
+  );
 </script>
 
 <section>
@@ -34,7 +36,7 @@
     <div class="action">
       <button
         disabled={$rowsQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
+        onclick={() => queryClient.invalidateQueries({ queryKey })}>Refresh</button
       >
     </div>
 
@@ -83,13 +85,13 @@
   .scroller {
     overflow: auto;
 
-    & > table {
+    table {
       width: max-content;
       font-family: var(--font-mono);
-    }
 
-    & > table td {
-      max-inline-size: unset;
+      td {
+        max-inline-size: unset;
+      }
     }
   }
 </style>

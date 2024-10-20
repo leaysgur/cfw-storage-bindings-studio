@@ -22,23 +22,23 @@
     "build"
   ],
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20231218.0",
-    "@sveltejs/adapter-static": "^3.0.1",
-    "@sveltejs/kit": "^2.0.6",
-    "prettier": "^3.1.1",
-    "prettier-plugin-svelte": "^3.1.2",
-    "svelte": "^4.2.8",
-    "svelte-check": "^3.6.2",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.10"
+    "@cloudflare/workers-types": "^4.20241018.0",
+    "@sveltejs/adapter-static": "^3.0.5",
+    "@sveltejs/kit": "^2.7.2",
+    "prettier": "^3.3.3",
+    "prettier-plugin-svelte": "^3.2.7",
+    "svelte": "^5.0.3",
+    "svelte-check": "^4.0.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9"
   },
   "dependencies": {
-    "@codemirror/lang-sql": "^6.5.5",
-    "@tanstack/svelte-query": "^5.17.1",
-    "cfw-bindings-wrangler-bridge": "^0.10.1",
+    "@codemirror/lang-sql": "^6.8.0",
+    "@tanstack/svelte-query": "^5.59.13",
+    "cfw-bindings-wrangler-bridge": "^0.11.0",
     "codemirror": "^6.0.1",
-    "open-props": "^1.6.16",
-    "svelte-codemirror-editor": "^1.2.0",
-    "wrangler": "^3.22.3"
+    "open-props": "^1.7.7",
+    "svelte-codemirror-editor": "^1.4.1",
+    "wrangler": "^3.81.0"
   }
 }

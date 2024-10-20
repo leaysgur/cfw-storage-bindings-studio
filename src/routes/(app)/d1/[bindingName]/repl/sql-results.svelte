@@ -1,19 +1,22 @@
 <script>
   import { createQuery } from "@tanstack/svelte-query";
 
-  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  export let D1;
-  /** @type {string} */
-  export let bindingName;
+  /**
+   * @type {{
+   *   D1: import("@cloudflare/workers-types/experimental").D1Database;
+   *   bindingName: string;
+   *   sqlToRun: string;
+   * }}
+   */
+  let { D1, bindingName, sqlToRun } = $props();
 
-  /** @type {string} */
-  export let sqlToRun;
-
-  $: sqlResultsQuery = createQuery({
-    queryKey: ["d1", bindingName, "sqlResults", sqlToRun],
-    queryFn: () => D1.prepare(sqlToRun).all(),
-    enabled: sqlToRun !== "",
-  });
+  let sqlResultsQuery = $derived(
+    createQuery({
+      queryKey: ["d1", bindingName, "sqlResults", sqlToRun],
+      queryFn: () => D1.prepare(sqlToRun).all(),
+      enabled: sqlToRun !== "",
+    }),
+  );
 </script>
 
 {#if $sqlResultsQuery.isLoading}
@@ -55,13 +58,13 @@
   .scroller {
     overflow: auto;
 
-    & > table {
+    table {
       width: max-content;
       font-family: var(--font-mono);
-    }
 
-    & > table td {
-      max-inline-size: unset;
+      td {
+        max-inline-size: unset;
+      }
     }
   }
 </style>

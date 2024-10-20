@@ -2,25 +2,29 @@
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
   import { decodeText, encodeText } from "$lib/utils.js";
 
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  export let KV;
-  /** @type {string} */
-  export let bindingName;
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>} */
-  export let key;
+  /**
+   * @type {{
+   *   KV: import("@cloudflare/workers-types/experimental").KVNamespace;
+   *   bindingName: string;
+   *   key: import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>;
+   * }}
+   */
+  let { KV, bindingName, key } = $props();
 
-  let editing = false;
+  let editing = $state(false);
 
-  /** @type {HTMLDialogElement} */
-  let dialogRef;
-  $: editing ? dialogRef?.showModal() : dialogRef?.close();
+  /** @type {HTMLDialogElement | null} */
+  let dialogRef = $state(null);
+  $effect(() => (editing ? dialogRef?.showModal() : dialogRef?.close()));
 
-  $: getQuery = createQuery({
-    queryKey: ["kv", bindingName, key.name],
-    queryFn: () => KV.get(key.name, "arrayBuffer"),
-    enabled: editing,
-    select: (data) => (data === null ? null : decodeText(data)),
-  });
+  let getQuery = $derived(
+    createQuery({
+      queryKey: ["kv", bindingName, key.name],
+      queryFn: () => KV.get(key.name, "arrayBuffer"),
+      enabled: editing,
+      select: (data) => (data === null ? null : decodeText(data)),
+    }),
+  );
 
   const queryClient = useQueryClient();
   const putMutation = createMutation({
@@ -36,7 +40,7 @@
   });
 </script>
 
-<dialog bind:this={dialogRef} on:close={() => (editing = false)}>
+<dialog bind:this={dialogRef} onclose={() => (editing = false)}>
   {#if $getQuery.isLoading}
     🌀 Loading value...
   {:else if $getQuery.isError}
@@ -44,10 +48,12 @@
   {:else if $getQuery.isSuccess}
     {#if $getQuery.data === null}
       <pre>🙈 Value was `null`</pre>
-      <button on:click={() => (editing = false)}>Cancel</button>
+      <button onclick={() => (editing = false)}>Cancel</button>
     {:else}
       <form
-        on:submit|preventDefault={(ev) => {
+        onsubmit={(ev) => {
+          ev.preventDefault();
+
           const data = new FormData(ev.currentTarget);
           const [textValue, binaryValue] = [data.get("text-value"), data.get("binary-value")];
 
@@ -65,7 +71,7 @@
           </div>
         </label>
         <div>
-          <button on:click={() => (editing = false)}>Cancel</button>
+          <button onclick={() => (editing = false)}>Cancel</button>
           <button type="submit" disabled={$putMutation.isPending}>Put</button>
         </div>
       </form>
@@ -73,7 +79,7 @@
   {/if}
 </dialog>
 
-<button on:click={() => (editing = true)}>Update</button>
+<button onclick={() => (editing = true)}>Update</button>
 
 <style>
   form {
@@ -86,7 +92,7 @@
     grid-template-columns: var(--size-8) minmax(0, 1fr);
     gap: var(--size-2);
 
-    & > div {
+    div {
       display: grid;
       gap: var(--size-2);
     }

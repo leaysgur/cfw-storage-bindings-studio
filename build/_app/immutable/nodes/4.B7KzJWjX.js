@@ -1,0 +1,1 @@
+var p=Object.defineProperty;var e=(t,a)=>p(t,"name",{value:a,configurable:!0});import{a as o,t as n}from"../chunks/disclose-version.BucBxo4S.js";var s=n('<p class="svelte-1lwcthy">Select a binding to inspect.</p>');function i(t){var a=s();o(t,a)}e(i,"_page");export{i as component};

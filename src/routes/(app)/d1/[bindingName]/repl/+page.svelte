@@ -35,17 +35,19 @@
 
   const { bindings } = getContext("appContext");
 
-  $: bindingName = $page.params.bindingName;
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  let D1 = $derived(bindings[bindingName]);
 
-  $: tableSchemaQuery = createQuery({
-    queryKey: ["d1", bindingName, "tableSchema"],
-    queryFn: () => queryTableSchema(D1),
-  });
+  let tableSchemaQuery = $derived(
+    createQuery({
+      queryKey: ["d1", bindingName, "tableSchema"],
+      queryFn: () => queryTableSchema(D1),
+    }),
+  );
 
-  let draftValue = "SELECT * FROM \n\n";
-  let sqlToRun = "";
+  let draftValue = $state("SELECT * FROM \n\n");
+  let sqlToRun = $state("");
 </script>
 
 <section>
@@ -70,10 +72,10 @@
         styles={{ "&": { backgroundColor: "var(--gray-1)", color: "var(--gray-9)" } }}
       />
       <div class="action">
-        <button on:click={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
+        <button onclick={() => (sqlToRun = draftValue)} disabled={draftValue.trim() === ""}
           >Run</button
         >
-        <button on:click={() => (draftValue = sqlToRun = "")}>Clear</button>
+        <button onclick={() => (draftValue = sqlToRun = "")}>Clear</button>
       </div>
     </div>
   {/if}

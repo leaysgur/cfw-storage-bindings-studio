@@ -10,22 +10,24 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
-  $: bindingName = $page.params.bindingName;
+  let bindingName = $derived($page.params.bindingName);
   /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  $: KV = bindings[bindingName];
+  let KV = $derived(bindings[bindingName]);
 
-  $: queryKey = ["kv", bindingName, "list"];
-  $: listQuery = createInfiniteQuery({
-    queryKey,
-    queryFn: ({ pageParam }) => KV.list({ cursor: pageParam.cursor, limit: 25 }),
-    initialPageParam:
-      /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListOptions} */ ({
-        cursor: null,
-      }),
-    getNextPageParam: (data) => (data.list_complete ? undefined : data),
-  });
+  let queryKey = $derived(["kv", bindingName, "list"]);
+  let listQuery = $derived(
+    createInfiniteQuery({
+      queryKey,
+      queryFn: ({ pageParam }) => KV.list({ cursor: pageParam.cursor, limit: 25 }),
+      initialPageParam:
+        /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListOptions} */ ({
+          cursor: null,
+        }),
+      getNextPageParam: (data) => (data.list_complete ? undefined : data),
+    }),
+  );
 
-  let filter = "";
+  let filter = $state("");
 </script>
 
 <section>
@@ -51,7 +53,7 @@
 
       <button
         disabled={$listQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}
+        onclick={() => queryClient.invalidateQueries({ queryKey })}
       >
         Refresh all
       </button>
@@ -75,7 +77,7 @@
                   <td align="left"><ShowValue {KV} {bindingName} {key} /></td>
                   <td>
                     <button
-                      on:click={() =>
+                      onclick={() =>
                         queryClient.invalidateQueries({ queryKey: ["kv", bindingName, key.name] })}
                       >Refresh</button
                     >
@@ -92,7 +94,7 @@
       </table>
     </div>
     {#if $listQuery.hasNextPage}
-      <button disabled={$listQuery.isFetchingNextPage} on:click={() => $listQuery.fetchNextPage()}>
+      <button disabled={$listQuery.isFetchingNextPage} onclick={() => $listQuery.fetchNextPage()}>
         Load more
       </button>
     {/if}
@@ -116,13 +118,13 @@
   .scroller {
     overflow: auto;
 
-    & > table {
-      font-family: var(--font-mono);
+    table {
       width: max-content;
-    }
+      font-family: var(--font-mono);
 
-    & > table td {
-      max-inline-size: unset;
+      td {
+        max-inline-size: unset;
+      }
     }
   }
 </style>

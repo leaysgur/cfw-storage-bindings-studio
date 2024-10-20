@@ -2,26 +2,6 @@
   import { createQuery } from "@tanstack/svelte-query";
   import { decodeText } from "$lib/utils.js";
 
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  export let KV;
-  /** @type {string} */
-  export let bindingName;
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>} */
-  export let key;
-
-  const VIEW_TYPES = /** @type {const} */ (["json"]);
-
-  /** @type {VIEW_TYPES[number] | null} */
-  let viewAs = null;
-  /** @type {HTMLDialogElement} */
-  let dialogRef;
-  $: viewAs !== null ? dialogRef?.showModal() : dialogRef?.close();
-
-  const getQuery = createQuery({
-    queryKey: ["kv", bindingName, key.name],
-    queryFn: () => KV.get(key.name, "arrayBuffer"),
-  });
-
   /** @param {any} data */
   const prettifyJSON = (data) => {
     try {
@@ -30,6 +10,30 @@
       return "🤯 Not valid JSON!";
     }
   };
+
+  const VIEW_TYPES = /** @type {const} */ (["json"]);
+
+  /** 
+   * @type {{
+   *   KV: import("@cloudflare/workers-types/experimental").KVNamespace;
+   *   bindingName: string;
+   *   key: import("@cloudflare/workers-types/experimental").KVNamespaceListKey<unknown>;
+   * }} 
+   */
+  let { KV, bindingName, key } = $props();
+
+  /** @type {VIEW_TYPES[number] | null} */
+  let viewAs = $state(null);
+  /** @type {HTMLDialogElement | null} */
+  let dialogRef = $state(null);
+  $effect(() => (viewAs !== null ? dialogRef?.showModal() : dialogRef?.close()));
+
+  let getQuery = $derived(
+    createQuery({
+      queryKey: ["kv", bindingName, key.name],
+      queryFn: () => KV.get(key.name, "arrayBuffer"),
+    }),
+  );
 </script>
 
 {#if $getQuery.isLoading}
@@ -44,11 +48,11 @@
     <div class="view-as">
       View as:
       {#each VIEW_TYPES as viewType}
-        <button on:click={() => (viewAs = viewType)}>{viewType}</button>
+        <button onclick={() => (viewAs = viewType)}>{viewType}</button>
       {/each}
     </div>
 
-    <dialog bind:this={dialogRef} on:close={() => (viewAs = null)}>
+    <dialog bind:this={dialogRef} onclose={() => (viewAs = null)}>
       {#if viewAs === "json"}
         <pre>{prettifyJSON($getQuery.data)}</pre>
       {/if}

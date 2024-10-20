@@ -2,27 +2,34 @@
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import { encodeText } from "$lib/utils.js";
 
-  /** @type {import("@cloudflare/workers-types/experimental").KVNamespace} */
-  export let KV;
-  /** @type {string} */
-  export let bindingName;
+  /**
+   * @type {{
+   *   KV: import("@cloudflare/workers-types/experimental").KVNamespace;
+   *   bindingName: string;
+   * }}
+   */
+  let { KV, bindingName } = $props();
 
   const queryClient = useQueryClient();
-  $: putMutation = createMutation({
-    /** @param {[key: string, value: File | string]} args */
-    mutationFn: ([key, fileOrString]) =>
-      Promise.resolve(
-        fileOrString instanceof File ? fileOrString.arrayBuffer() : encodeText(fileOrString),
-      ).then((value) => KV.put(key, value).then(() => key)),
-    onSuccess: (key) => {
-      queryClient.invalidateQueries({ queryKey: ["kv", bindingName, "list"] });
-      queryClient.invalidateQueries({ queryKey: ["kv", bindingName, key] });
-    },
-  });
+  let putMutation = $derived(
+    createMutation({
+      /** @param {[key: string, value: File | string]} args */
+      mutationFn: ([key, fileOrString]) =>
+        Promise.resolve(
+          fileOrString instanceof File ? fileOrString.arrayBuffer() : encodeText(fileOrString),
+        ).then((value) => KV.put(key, value).then(() => key)),
+      onSuccess: (key) => {
+        queryClient.invalidateQueries({ queryKey: ["kv", bindingName, "list"] });
+        queryClient.invalidateQueries({ queryKey: ["kv", bindingName, key] });
+      },
+    }),
+  );
 </script>
 
 <form
-  on:submit|preventDefault={(ev) => {
+  onsubmit={(ev) => {
+    ev.preventDefault();
+
     const data = new FormData(ev.currentTarget);
     const [key, textValue, binaryValue] = [
       data.get("key"),
@@ -43,7 +50,7 @@
   <label
     >Value:
     <div>
-      <textarea name="text-value" />
+      <textarea name="text-value"></textarea>
       <span>OR</span>
       <input type="file" name="binary-value" />
     </div>
@@ -62,7 +69,7 @@
     grid-template-columns: var(--size-8) minmax(0, 1fr);
     gap: var(--size-2);
 
-    & > div {
+    div {
       display: grid;
       gap: var(--size-2);
     }

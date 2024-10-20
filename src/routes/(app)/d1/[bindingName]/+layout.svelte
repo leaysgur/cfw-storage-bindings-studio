@@ -7,19 +7,24 @@
   const { bindings } = getContext("appContext");
   const queryClient = useQueryClient();
 
-  $: bindingName = $page.params.bindingName;
-  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
-  $: D1 = bindings[bindingName];
+  /** @type {{ children: import("svelte").Snippet }} */
+  let { children } = $props();
 
-  $: queryKey = ["d1", bindingName, "tables"];
-  $: tablesQuery = createQuery({
-    queryKey,
-    queryFn: () =>
-      D1.prepare("PRAGMA table_list")
-        .raw()
-        .then((rows) => /** @type {string[][]} */ (rows)),
-    select: (data) => excludePrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
-  });
+  let bindingName = $derived($page.params.bindingName);
+  /** @type {import("@cloudflare/workers-types/experimental").D1Database} */
+  let D1 = $derived(bindings[bindingName]);
+
+  let queryKey = $derived(["d1", bindingName, "tables"]);
+  let tablesQuery = $derived(
+    createQuery({
+      queryKey,
+      queryFn: () =>
+        D1.prepare("PRAGMA table_list")
+          .raw()
+          .then((rows) => /** @type {string[][]} */ (rows)),
+      select: (data) => excludePrivateTableList(data).map(([, name, , ncol]) => ({ name, ncol })),
+    }),
+  );
 </script>
 
 <section>
@@ -35,7 +40,7 @@
     <div class="action">
       <button
         disabled={$tablesQuery.isFetching}
-        on:click={() => queryClient.invalidateQueries({ queryKey })}>Refresh tables list</button
+        onclick={() => queryClient.invalidateQueries({ queryKey })}>Refresh tables list</button
       >
     </div>
 
@@ -54,9 +59,7 @@
       </ul>
     </div>
   {/if}
-  <div class="main">
-    <slot />
-  </div>
+  <div class="main">{@render children()}</div>
 </section>
 
 <style>

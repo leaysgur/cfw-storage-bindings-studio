@@ -26,6 +26,13 @@ npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --remote
 npx cfw-storage-bindings-studio --config ./path/to/wrangler.toml --persist-to ./path/to/.wrangler/state
 ```
 
+## Development
+
+```sh
+# Run wrangler dev .. cfw-bindings-wrangler-bridge .. somewhere, then
+npm run dev
+```
+
 ## TODOs
 
 - [x] CLI
